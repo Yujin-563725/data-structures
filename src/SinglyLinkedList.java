@@ -1,45 +1,33 @@
-public class LinkedList {
-    private class ListNode extends Node<Integer>{
-
-        public ListNode(int data, Node<Integer> next) {
-            super(data, next);
-        }
-
-        @Override
-        public ListNode getNext() {
-            return (ListNode) super.getNext();
-        }
-    }
-
+public class SinglyLinkedList<E> {
     // This class has a default constructor:
-    public LinkedList() {
+    public SinglyLinkedList() {
         length = 0;
     }
 
     // This is the only field of the class.  It holds the head of the list
-    ListNode head;
+    Node<E> head;
 
     // Length of the linked list
     private int length = 0;
 
-    // Return the first node in the list
-    public synchronized ListNode getHead() {
+    // Return the first Node<E> in the list
+    public synchronized Node<E> getHead() {
         return head;
     }
 
-    // Insert a node at the beginning of the list
-    public synchronized void insertAtBegin(ListNode node) {
+    // Insert a Node<E> at the beginning of the list
+    public synchronized void insertAtBegin(Node<E> node) {
         node.setNext(head);
         head = node;
         length ++;
     }
 
-    // Insert a node at the end of the list
-    public synchronized void insertAtEnd(ListNode node) {
+    // Insert a Node<E> at the end of the list
+    public synchronized void insertAtEnd(Node<E> node) {
         if (head == null)
             head = node;
         else {
-            ListNode p, q;
+            Node<E> p, q;
             for(p = head; (q = p.getNext()) != null; p = q);
             p.setNext(node);
         }
@@ -48,7 +36,7 @@ public class LinkedList {
 
     // Add a new value to the list at a given position.
     // All values at that position to the end move over to make room.
-    public void insert(int data, int position) {
+    public void insert(E data, int position) {
         // fix the position
         if (position < 0) {
             position = 0;
@@ -59,21 +47,21 @@ public class LinkedList {
 
         // if the list is empty, make it be the only element
         if (head == null) {
-            head = new ListNode(data);
+            head = new Node<E>(data);
         }
         // if adding at the front of the list...
         else if (position == 0) {
-            ListNode temp = new ListNode(data);
+            Node<E> temp = new Node<E>(data);
             temp.next = head;
             head = temp;
         }
         // else find the correct position and insert
         else {
-            ListNode temp = head;
+            Node<E> temp = head;
             for (int i=1; i<position; i+=1) {
                 temp = temp.getNext();
             }
-            ListNode newNode = new ListNode(data);
+            Node<E> newNode = new Node<E>(data);
             newNode.next = temp.next;
             temp.setNext(newNode);
         }
@@ -81,9 +69,9 @@ public class LinkedList {
         length += 1;
     }
 
-    // Remove and return the node at the head of the list
-    public synchronized ListNode removeFromBegin() {
-        ListNode node = head;
+    // Remove and return the Node<E> at the head of the list
+    public synchronized Node<E> removeFromBegin() {
+        Node<E> node = head;
         if (node != null) {
             head = node.getNext();
             node.setNext(null);
@@ -91,25 +79,25 @@ public class LinkedList {
         return node;
     }
 
-    // Remove and return the node at the end of the list
-    public synchronized ListNode getLast() {
+    // Remove and return the Node<E> at the end of the list
+    public synchronized Node<E> getLast() {
         if (head == null)
             return null;
         if (head.getNext() == null) {
             return head;
         }
-        ListNode p = head.getNext();
+        Node<E> p = head.getNext();
         while(p.getNext() != null) {
             p = p.getNext();
         }
         return p;
     }
 
-    // Remove and return the node at the end of the list
-    public synchronized ListNode removeFromEnd() {
+    // Remove and return the Node<E> at the end of the list
+    public synchronized Node<E> removeFromEnd() {
         if (head == null)
             return null;
-        ListNode p = head, q = null, next = head.getNext();
+        Node<E> p = head, q = null, next = head.getNext();
         if (next == null) {
             head = null;
             // reduce the length of the list
@@ -126,9 +114,9 @@ public class LinkedList {
         return p;
     }
 
-    // Remove a node matching the specified node from the list.
-    // Use equals() instead of == to test for a matched node.
-    public synchronized void removeMatched(ListNode node) {
+    // Remove a Node<E> matching the specified Node<E> from the list.
+    // Use equals() instead of == to test for a matched Node<E>.
+    public synchronized void removeMatched(Node<E> node) {
         if (head == null)
             return;
         if (node.equals(head)) {
@@ -137,7 +125,7 @@ public class LinkedList {
             length-=1;
             return;
         }
-        ListNode p = head, q = null;
+        Node<E> p = head, q = null;
         while((q = p.getNext()) != null) {
             if (node.equals(q)) {
                 p.setNext(q.getNext());
@@ -172,7 +160,7 @@ public class LinkedList {
         }
         // else advance to the correct position and remove
         else {
-            ListNode temp = head;
+            Node<E> temp = head;
             for (int i=1; i<position; i+=1) {
                 temp = temp.getNext();
             }
@@ -189,7 +177,7 @@ public class LinkedList {
             return result+"]";
         }
         result = result + head.getData();
-        ListNode temp = head.getNext();
+        Node<E> temp = head.getNext();
         while (temp != null) {
             result = result + "," + temp.getData();
             temp = temp.getNext();
@@ -206,10 +194,10 @@ public class LinkedList {
     // The equals method us used to determine equality.
     public int getPosition(int data) {
         // go looking for the data
-        ListNode temp = head;
+        Node<E> temp = head;
         int pos = 0;
         while (temp != null) {
-            if (temp.getData() == data) {
+            if (temp.getData().equals(data)) {
                 // return the position if found
                 return pos;
             }
